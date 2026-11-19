@@ -71,6 +71,10 @@ function setPriority(priorityFlag){
 }
 
 function getDate(datestring){
+    if (datestring instanceof Date){
+        return datestring;
+    }
+    
     if (datestring){
         const [a,b,c] = datestring.split("-");
 
