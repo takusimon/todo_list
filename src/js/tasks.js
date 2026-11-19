@@ -6,7 +6,7 @@ class Task {
         this.project = ""
         this.note = "";
         this.done = false;
-        this.id = crypto.randomUUID;
+        this.id = crypto.randomUUID();
     }
     get title(){
         return this._title;
@@ -31,6 +31,14 @@ class Task {
     set priority(priorityState){
         this._priority = setPriority(priorityState);
     }
+
+    get project(){
+        return this._project;
+    }
+    
+    set project(projectName){
+        this._project = projectName;
+    }
     get note(){
         return this._note;
     }
@@ -43,12 +51,8 @@ class Task {
         }
     }
 
-    get done(){
-        return this._done;
-    }
-
-    set done(state){
-        this._done = state;
+    toggleDone (){
+        this.done = ~this.done;
     }
 }
 
@@ -66,12 +70,6 @@ function setPriority(priorityFlag){
     }
 }
 
-function markDone(task){
-    task.done = !task.done;
-
-    return task;
-}
-
 function getDate(datestring){
     if (datestring){
         const [a,b,c] = datestring.split("-");
@@ -82,7 +80,7 @@ function getDate(datestring){
     return
 }
 
-export function createTask(title,dueDate=null,priority=null){
+function createTask(title,dueDate=null,priority=null){
     const task = new Task(title);
     task.dueDate = dueDate;
     task.priority = priority;
@@ -90,3 +88,26 @@ export function createTask(title,dueDate=null,priority=null){
     return task;
 }
 
+(function taskMasterList(){
+    const allTasks = [];
+
+    const getAllTasks = () => [...allTasks].sort((task1,task2) => {
+        if (task1.dueDate === null) return 1;
+        if (task2.dueDate === null) return -1;
+
+        return task1.dueDate-task2.dueDate});
+    
+    const appendTask = (task) => allTasks.push(task);
+    
+    const deleteTask = (taskToDel) => {
+        const taskID = taskToDel.id;
+
+        const taskIndex = allTasks.findIndex((task) => task.id === taskID)
+        allTasks.splice(taskIndex,1);
+
+    }
+
+    return {getAllTasks,appendTask,deleteTask};
+})
+
+export {taskMasterList,createTask};

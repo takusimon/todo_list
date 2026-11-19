@@ -1,6 +1,6 @@
 import { createTask} from "./tasks.js";
 
-function Project(name){
+function createProject(name){
     const getProjectName = () => name;
     const taskList = [];
     const completedTasks = [];
@@ -19,25 +19,26 @@ function Project(name){
     return {getTasks,addTask,deleteTask,getCompletedTasks,moveCompletedTasks,createTask,getProjectName};
 }
 
-const inbox = Project("Inbox");
 
-export default (()=>{
-    const projects = [inbox,];
 
-    const appendProject = (project) => projects.push(project);
+const  Projects = (()=>{
+    const allProjects = [];
+    const appendProject = (project) => allProjects.push(project);
 
     const deleteProject = (index) => {
-        if (index === 0){
-            return
-        }
-        else {
-            projects.slice(index,1);
-        }
+            allProjects.slice(index,1);
     }
 
-    const getProjects = () => [...projects];
+    const getProjects = () => [...allProjects];
 
-    const createProject = (name) => Project(name);
+    const createProjects = (name) => createProject(name);
 
-    return {appendProject,deleteProject,getProjects,createProject};
+    return {appendProject,deleteProject,getProjects,createProjects};
 })();
+
+const workSpaces = (()=> {
+    const inbox = createProject("Inbox");
+    const myDay = createProject("My day");
+    const upComing = createProject("Upcoming");
+    const completed = createProject("Completed")
+})
