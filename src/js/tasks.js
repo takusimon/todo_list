@@ -89,5 +89,7 @@ export function CreateTask(title,dueDate=null,priority=null){
     const task = new Task(title);
     task.dueDate = dueDate;
     this.priority = priority;
+
+    return task;
 }
 
