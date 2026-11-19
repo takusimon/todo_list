@@ -1,44 +1,52 @@
-import { createTask} from "./tasks.js";
+import { createTask,taskMasterList,sortTasks} from "./tasks.js";
 
-function createProject(name){
-    const getProjectName = () => name;
-    const taskList = [];
-    const completedTasks = [];
+class CreateProject{
+    constructor(name){
+        this.projectName = name;
+        this.id = crypto.randomUUID();
+    }
 
-    const getTasks = () => [...taskList];
-    const getCompletedTasks = () => [...completedTasks];
+    #taskList = taskMasterList.getTasks().filter(task => task.project === this.projectName);
 
-    const addTask = (task) => taskList.unshift(task);
+    #completedTasks = taskMasterList.getCompletedTasks().filter(task => task.project === this.projectName)
+    
+    deleteTaskFromProject (task) {
+        taskMasterList.deleteTask(task);
+    }
 
-    const deleteTask = (index) => taskList.splice(index,1);
-    const moveCompletedTasks = (index) => {
-        const [completedTask] = taskList.splice(index,1);
-        completedTasks.unshift(completedTask);
-    };
+    addTaskToProject (name,dueDate=null,priority=null){
+        const task = createTask(name,dueDate,priority);
+        task.project = this.projectName;
 
-    return {getTasks,addTask,deleteTask,getCompletedTasks,moveCompletedTasks,createTask,getProjectName};
+        taskMasterList.addTask(task);
+    }
+
+    getProjectTasks (){
+        return [...this.#taskList].sort(sortTasks);
+    }
+
+    getCompletedTasks(){
+        return [...this.#completedTasks].sort(sortTasks);
+    }
 }
 
 
 
-const  Projects = (()=>{
+const  ProjectMasterList = (()=>{
     const allProjects = [];
     const appendProject = (project) => allProjects.push(project);
 
-    const deleteProject = (index) => {
-            allProjects.slice(index,1);
+    const deleteProject = (project) => {
+            const projectID = project.id;
+            const projectIndex = allProjects.findIndex(project => project.id === projectID);
+            allProjects.slice(projectIndex,1);
     }
 
     const getProjects = () => [...allProjects];
 
-    const createProjects = (name) => createProject(name);
+    const createProjects = (name) => new CreateProject(name);
 
     return {appendProject,deleteProject,getProjects,createProjects};
 })();
 
-const workSpaces = (()=> {
-    const inbox = createProject("Inbox");
-    const myDay = createProject("My day");
-    const upComing = createProject("Upcoming");
-    const completed = createProject("Completed")
-})
+export {ProjectMasterList}

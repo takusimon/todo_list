@@ -88,14 +88,20 @@ function createTask(title,dueDate=null,priority=null){
     return task;
 }
 
+function sortTasks(task1,task2){
+    if (task1.dueDate === null) return 1;
+    if (task2.dueDate === null) return -1;
+
+    return task1.dueDate-task2.dueDate
+}
+
 (function taskMasterList(){
     const allTasks = [];
+    const allCompletedTasks = [];
 
-    const getAllTasks = () => [...allTasks].sort((task1,task2) => {
-        if (task1.dueDate === null) return 1;
-        if (task2.dueDate === null) return -1;
-
-        return task1.dueDate-task2.dueDate});
+    const getAllTasks = () => [...allTasks].sort(sortTasks);
+    
+    const getCompletedTasks = ()=> [...allCompletedTasks].sort(sortTasks);
     
     const appendTask = (task) => allTasks.push(task);
     
@@ -107,7 +113,16 @@ function createTask(title,dueDate=null,priority=null){
 
     }
 
-    return {getAllTasks,appendTask,deleteTask};
+    const addCompletedTasks = (task) => {
+        if (task.done){
+        const [completed] = deleteTask(task);
+        allCompletedTasks.push(completed);
+        }
+    }
+
+
+
+    return {getAllTasks,appendTask,deleteTask,addCompletedTasks,getCompletedTasks};
 })
 
-export {taskMasterList,createTask};
+export {taskMasterList,createTask,sortTasks};
