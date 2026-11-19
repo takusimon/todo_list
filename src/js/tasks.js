@@ -5,7 +5,8 @@ class Task {
         this.priority = "";
         this.project = ""
         this.note = "";
-        this.done = "";
+        this.done = false;
+        this.id = crypto.randomUUID;
     }
     get title(){
         return this._title;
@@ -66,11 +67,7 @@ function setPriority(priorityFlag){
 }
 
 function markDone(task){
-    if (task.done){
-        task.done = false;
-    } else {
-        task.done = true;
-    }
+    task.done = !task.done;
 
     return task;
 }
@@ -79,16 +76,16 @@ function getDate(datestring){
     if (datestring){
         const [a,b,c] = datestring.split("-");
 
-        return new Date(a,b,c);
+        return new Date(a,b-1,c);
     };
 
     return
 }
 
-export function CreateTask(title,dueDate=null,priority=null){
+export function createTask(title,dueDate=null,priority=null){
     const task = new Task(title);
     task.dueDate = dueDate;
-    this.priority = priority;
+    task.priority = priority;
 
     return task;
 }
