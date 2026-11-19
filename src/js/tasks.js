@@ -1,13 +1,35 @@
-export class Task {
-    constructor(title,dueDate=null,priority=null,project=null){
+class Task {
+    constructor(title){
         this.title = title;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.project = project;
+        this.dueDate = "";
+        this.priority = "";
+        this.project = ""
         this.note = "";
         this.done = "";
     }
+    get title(){
+        return this._title;
+    }
+    
+    set title(text){
+        this._title = text;
+    }
 
+    get dueDate(){
+        return this._dueDate;
+    }
+
+    set dueDate(datestring){
+        this._dueDate = getDate(datestring) ?? null;
+    }
+
+    get priority(){
+        return this._priority;
+    }
+
+    set priority(priorityState){
+        this._priority = setPriority(priorityState);
+    }
     get note(){
         return this._note;
     }
@@ -29,20 +51,43 @@ export class Task {
     }
 }
 
-export function Project(name){
-    const taskList = [];
-    const completedTasks = [];
+function setPriority(priorityFlag){
+    switch (priorityFlag){
+        case "red-flag":
+            return "HIGH";
+        case "yellow-flag":
+            return "MED";
+        case "blue-flag":
+            return "LOW";
+        case "clear-flag":
+        default:
+            return "NONE";
+    }
+}
 
-    const getTasks = () => taskList;
-    const getCompletedTasks = () => completedTasks;
-
-    const addTask = (task) => taskList.unshift(task);
-
-    const deleteTask = (index) => taskList.splice(index,1);
-    const moveCompletedTasks = (index) => {
-        const [completedTask] = taskList.splice(index,1);
-        completedTasks.unshift(completedTask);
+function markDone(task){
+    if (task.done){
+        task.done = false;
+    } else {
+        task.done = true;
     }
 
-    return {getTasks,addTask,deleteTask,getCompletedTasks,moveCompletedTasks};
+    return task;
 }
+
+function getDate(datestring){
+    if (datestring){
+        const [a,b,c] = datestring.split("-");
+
+        return new Date(a,b,c);
+    };
+
+    return
+}
+
+export function CreateTask(title,dueDate=null,priority=null){
+    const task = new Task(title);
+    task.dueDate = dueDate;
+    this.priority = priority;
+}
+
