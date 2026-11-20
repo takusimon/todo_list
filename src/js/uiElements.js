@@ -1,6 +1,5 @@
-import { Inbox } from "./workspaces.js";
-import { ProjectMasterList } from "./projects.js";
 import {formatDistanceToNow} from "date-fns";
+
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
@@ -12,17 +11,18 @@ const makeInputBox = ()=>{
     taskInput.name = "task-input";
     taskInput.placeholder = "New Task Here";
 
-    const addTaskBtn = document.createElement("button");
+
+    
     
 
-    newTaskForm.append(taskInput,addTaskBtn);
+    newTaskForm.append(taskInput,);
 
     return newTaskForm
 };
 
 const makeTaskListMemeber = (task) => {
     const taskContainer = document.createElement("div")
-    taskContainer.id = task.id;
+    taskContainer.dataset.taskId = task.id;
 
     const title = document.createElement("p");
     title.classList.add("task-title");
@@ -77,4 +77,14 @@ function makeElement (type,elementClass=null) {
     return element
 }
 
-export {makeInputBox,makeTaskListMemeber,workSpaceButtons,makeContainer,makeElement};
+const makeProjectListMember = (project) => {
+    const projectContainer = document.createElement("section");
+    projectContainer.classList.add("todo-pane");
+    const projectName = document.createElement("h1");
+    projectName.textContent = project.projectName || project.name();
+    const taskForm = newTaskForm();
+    // const taskContainer =
+};
+
+
+

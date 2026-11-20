@@ -127,6 +127,6 @@ const taskMasterList = (()=>{
 
 
     return {getAllTasks,appendTask,deleteTask,addCompletedTasks,getCompletedTasks};
-})
+})();
 
 export {taskMasterList,createTask,sortTasks};
