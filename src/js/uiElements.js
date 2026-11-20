@@ -1,5 +1,6 @@
 import {formatDistanceToNow} from "date-fns";
-
+import { taskMasterList } from "./tasks.js";
+import { WorkspaceMasterList } from "./projects.js";
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
@@ -50,6 +51,8 @@ const makeTaskListMemeber = (task) => {
 };
 
 const workSpaceButtons = ()=> {
+    const todoPane = document.querySelector(".todo-pane")
+    const workspaces = WorkspaceMasterList.getWorkspaces();
     const allBtn = document.createElement("button");
     allBtn.id = "all";
     allBtn.classList.add("workspace");
@@ -59,6 +62,10 @@ const workSpaceButtons = ()=> {
     inboxBtn.id = "inbox";
     inboxBtn.classList.add("workspace");
     inboxBtn.textContent = "Inbox";
+    inboxBtn.addEventListener('click',() => {
+        todoPane.textContent = '';
+       todoPane.appendChild(makeProjectListPane(workspaces[1]))
+    })
 
     return [allBtn,inboxBtn];
 };
@@ -77,14 +84,30 @@ function makeElement (type,elementClass=null) {
     return element
 }
 
-const makeProjectListMember = (project) => {
-    const projectContainer = document.createElement("section");
+function makeProjectListPane (project){
+    const projectContainer = document.createElement("div");
     projectContainer.classList.add("todo-pane");
     const projectName = document.createElement("h1");
-    projectName.textContent = project.projectName || project.name();
-    const taskForm = newTaskForm();
-    // const taskContainer =
+    projectName.textContent = project.projectName;
+    const taskForm = makeInputBox();
+    const taskContainer = document.createElement("div");
+    const projectTasks = project.getProjectTasks();
+    for (let task of projectTasks){
+     taskContainer.append(makeTaskListMemeber(task));
+    }
+    const completedProjectTasks = project.getCompletedTasks();
+    const completedText = document.createElement("h2");
+    completedText.textContent = "Completed";
+    taskContainer.appendChild(completedText);
+
+    for (let task of completedProjectTasks){
+        taskContainer.append(makeTaskListMemeber(task));
+    }
+
+    projectContainer.append(projectName,taskForm,taskContainer);
+
+    return projectContainer
 };
 
 
-
+export {workSpaceButtons}
