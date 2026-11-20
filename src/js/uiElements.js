@@ -1,6 +1,6 @@
 import { Inbox } from "./workspaces.js";
 import { ProjectMasterList } from "./projects.js";
-import { format, compareAsc, formatDistanceToNow} from "date-fns";
+import {formatDistanceToNow} from "date-fns";
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
@@ -49,7 +49,7 @@ const makeTaskListMemeber = (task) => {
     return taskContainer;
 };
 
-const workSpaceButtons = (()=>{
+const workSpaceButtons = ()=> {
     const allBtn = document.createElement("button");
     allBtn.id = "all";
     allBtn.classList.add("workspace");
@@ -61,6 +61,20 @@ const workSpaceButtons = (()=>{
     inboxBtn.textContent = "Inbox";
 
     return [allBtn,inboxBtn];
-})();
+};
 
-export {makeInputBox,makeTaskListMemeber,workSpaceButtons};
+const makeContainer = (id) => {
+    const container = document.createElement('div');
+    container.id = id;
+
+    return container;
+}
+
+function makeElement (type,elementClass=null) {
+    const element = document.createElement(type);
+    element.classList.add(elementClass);
+
+    return element
+}
+
+export {makeInputBox,makeTaskListMemeber,workSpaceButtons,makeContainer,makeElement};

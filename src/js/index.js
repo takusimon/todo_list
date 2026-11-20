@@ -1,11 +1,15 @@
 import "../css/reset.css";
 import "../css/style.css";
 
-import { makeInputBox } from "./todoUI.js";
+import { makeInputBox,makeTaskListMemeber,workSpaceButtons,makeContainer,makeElement} from "./uiElements.js";
 
-const todoPane = document.querySelector(".todo-pane");
+const projectPane = (()=>{
+    const projectOverview = document.querySelector(".project-overview");
+    const workspaceContainer = makeContainer("workspace-container");
+    const [all,inbox] = workSpaceButtons();
+    workspaceContainer.append(all,inbox);
 
-todoPane.appendChild(makeInputBox());
-
+    projectOverview.append();
+})();
 
 
