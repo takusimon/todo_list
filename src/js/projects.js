@@ -48,8 +48,9 @@ const  ProjectMasterList = (()=>{
     const getProjects = () => [...allProjects];
 
     const createProjects = (name) => new CreateProject(name);
+    const findProject = (id) => allProjects.findIndex(project => project.id === id);
 
-    return {appendProject,deleteProject,getProjects,createProjects};
+    return {appendProject,deleteProject,getProjects,createProjects,findProject};
 })();
 
 export {ProjectMasterList}
