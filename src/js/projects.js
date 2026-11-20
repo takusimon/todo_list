@@ -3,12 +3,13 @@ import { createTask,taskMasterList,sortTasks} from "./tasks.js";
 class CreateProject{
     constructor(name){
         this.projectName = name;
-        this.id = crypto.randomUUID();
+        
     }
-
-    #taskList = taskMasterList.getTasks().filter(task => task.project === this.projectName);
-
-    #completedTasks = taskMasterList.getCompletedTasks().filter(task => task.project === this.projectName)
+    #id = crypto.randomUUID();
+    
+    get id(){
+        return this.#id;
+    }
     
     deleteTaskFromProject (task) {
         taskMasterList.deleteTask(task);
@@ -16,17 +17,19 @@ class CreateProject{
 
     addTaskToProject (name,dueDate=null,priority=null){
         const task = createTask(name,dueDate,priority);
-        task.project = this.projectName;
+        task.project = this.id;
 
         taskMasterList.addTask(task);
     }
 
     getProjectTasks (){
-        return [...this.#taskList].sort(sortTasks);
+        const tasks = taskMasterList.getAllTasks().filter(task => task.project === this.id);
+        return [...tasks].sort(sortTasks);
     }
 
     getCompletedTasks(){
-        return [...this.#completedTasks].sort(sortTasks);
+        const completedTasks = taskMasterList.getCompletedTasks().filter(task => task.project === this.id);
+        return [...completedTasks].sort(sortTasks);
     }
 }
 

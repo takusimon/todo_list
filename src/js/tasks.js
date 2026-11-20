@@ -74,7 +74,7 @@ function getDate(datestring){
     if (datestring instanceof Date){
         return datestring;
     }
-    
+
     if (datestring){
         const [a,b,c] = datestring.split("-");
 
@@ -99,7 +99,7 @@ function sortTasks(task1,task2){
     return task1.dueDate-task2.dueDate
 }
 
-(function taskMasterList(){
+const taskMasterList = (()=>{
     const allTasks = [];
     const allCompletedTasks = [];
 

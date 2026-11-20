@@ -20,11 +20,14 @@ function addTasktoTodayWorkSpace (name,dueDate=null,priority=null){
 }
 
 const Inbox = (()=> {
-    let taskList = [];
-    let completedTasks = [];
-
+    
+    
     const getFilteredtasks = () => {
-        taskList = [];
-        taskList = taskMasterList.getAllTasks().filter(task => task.project === "");
+    
+    return    taskList = taskMasterList.getAllTasks().filter(task => task.project === "").sort(sortTasks);
     }
+
+    return Object.assign({},{getFilteredtasks},{deleteTask,addTasktoWorkspace});
 })();
+
+export {Inbox};
