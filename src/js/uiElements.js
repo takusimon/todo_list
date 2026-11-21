@@ -103,9 +103,9 @@ const makeContainer = (id) => {
     return container;
 }
 
-function makeElement (type,elementClass=null) {
+function makeElement (type) {
     const element = document.createElement(type);
-    element.classList.add(elementClass);
+
 
     return element
 }
@@ -136,6 +136,68 @@ function makeProjectListPane (project){
     return projectContainer
 };
 
+const makeNewProjectsButton = () => {
+    const projectTitle = makeElement("p");
+    const newProjectContainer = makeContainer('new-project-container');
+    const projectsContainer = makeContainer('project-container');
+    projectTitle.id = "project-title";
+    projectTitle.textContent = "Projects";
+
+    const projectDialogue = makeElement("dialog");
+    projectDialogue.id = "new-project dialogue";
+
+    const newProjectForm = makeElement("form");
+    newProjectForm.id = "new-project-form";
+
+    const newProjectInput = makeElement("input");
+    newProjectInput.type = "text";
+    newProjectInput.id = "new-project-input";
+    newProjectInput.placeholder = "Project Name";
+    newProjectForm.append(newProjectInput);
+
+    const cancelBtn = makeElement("button");
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.addEventListener('click',() =>{
+        newProjectForm.reset();
+        projectDialogue.close()});
+
+    const addProjBtn = makeElement("button");
+    addProjBtn.textContent = "Add";
+    addProjBtn.htmlFor = "new-project-form";
+    addProjBtn.addEventListener('click',(event) => {
+        event.preventDefault();
+        if (newProjectInput.value){
+            const projButton = makeElement("button");
+            const project = ProjectMasterList.createProjects(newProjectInput.value.trim());
+            ProjectMasterList.appendProject(project);
+            projButton.textContent = project.projectName;
+            projButton.addEventListener('click',()=>{
+                appendTodoPane(makeProjectListPane(project))
+            });
+            projectsContainer.appendChild(projButton);
+            newProjectForm.reset();
+            projectDialogue.close();
+        }else {
+            alert("Project must have a name!")
+        }
+    })
+
+    projectDialogue.append(newProjectForm,cancelBtn,addProjBtn);
+
+    const addProjectBtn = makeContainer("button");
+    addProjectBtn.textContent = "➕";
+
+    addProjectBtn.addEventListener('click',() =>{
+        projectDialogue.showModal();
+    })
+
+
+    newProjectContainer.append(projectTitle,addProjectBtn,projectDialogue,projectsContainer);
+
+    return newProjectContainer
+
+}
+
 function appendTodoPane (pane){
     const todoPane = document.querySelector(".todo-pane");
     todoPane.textContent = '';
@@ -144,4 +206,4 @@ function appendTodoPane (pane){
 
 
 
-export {workSpaceButtons}
+export {workSpaceButtons,makeElement,makeContainer,makeNewProjectsButton}

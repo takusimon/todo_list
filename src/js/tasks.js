@@ -76,22 +76,6 @@ class Task {
     
 }
 
-function setPriority(priorityFlag){
-    
-}
-
-
-function getDate(datestring){
-   
-
-    
-
-    return
-}
-
-
-
-
 
 const taskMasterList = (()=>{
     const allTasks = [];
