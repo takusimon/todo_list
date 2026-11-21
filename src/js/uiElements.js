@@ -1,5 +1,6 @@
 import { ProjectMasterList, WorkspaceMasterList,returnProjectGivenID } from "./projects.js";
 import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import { taskMasterList } from "./tasks.js";
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
@@ -140,6 +141,7 @@ const makeNewProjectsButton = () => {
     const projectTitle = makeElement("p");
     const newProjectContainer = makeContainer('new-project-container');
     const projectsContainer = makeContainer('project-container');
+    const projectButtonContainer = makeContainer('project-button-container')
     projectTitle.id = "project-title";
     projectTitle.textContent = "Projects";
 
@@ -174,7 +176,10 @@ const makeNewProjectsButton = () => {
             projButton.addEventListener('click',()=>{
                 appendTodoPane(makeProjectListPane(project))
             });
-            projectsContainer.appendChild(projButton);
+            projectButtonContainer.append(projButton);
+            projectButtonContainer.dataset.projectId = project.id;
+            projectsContainer.appendChild(projectButtonContainer);
+            deleteProjectButton(project);
             newProjectForm.reset();
             projectDialogue.close();
         }else {
@@ -191,6 +196,21 @@ const makeNewProjectsButton = () => {
         projectDialogue.showModal();
     })
 
+    function deleteProjectButton(project){
+        const projectContainer = document.querySelector(`[data-project-id="${project.id}"]`);
+        const deleteProject = makeElement("button");
+        deleteProject.textContent = "X";
+        deleteProject.addEventListener('click',()=>{
+            ProjectMasterList.deleteProject(project.id);
+            projectContainer.remove();
+            const projectTasks = [].concat(project.getProjectTasks(),project.getCompletedTasks());
+            for (let i = 0;i < projectTasks.length; i++){
+                taskMasterList.deleteTask(project.id);
+            }
+            customClickEvent();
+        })
+        projectContainer.appendChild(deleteProject);
+    }
 
     newProjectContainer.append(projectTitle,addProjectBtn,projectDialogue,projectsContainer);
 
@@ -203,7 +223,11 @@ function appendTodoPane (pane){
     todoPane.textContent = '';
     todoPane.append(pane);
 }
-
+function customClickEvent (){
+    const inboxBtn = document.querySelector("#inbox");
+    let event = new Event('click');
+    inboxBtn.dispatchEvent(event);
+}
 
 
 export {workSpaceButtons,makeElement,makeContainer,makeNewProjectsButton}

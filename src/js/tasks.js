@@ -87,8 +87,9 @@ const taskMasterList = (()=>{
     
     const appendTask = (task) => allTasks.push(task);
     
-    const deleteTask = (taskid) => {
-        const taskIndex = allTasks.findIndex((task) => task.id === taskid)
+    const deleteTask = (projectID) => {
+        const tasks = [].concat(allTasks,allCompletedTasks);
+        const taskIndex = tasks.findIndex((task) => task.project === projectID)
         allTasks.splice(taskIndex,1);
 
     }
