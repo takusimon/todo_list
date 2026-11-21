@@ -49,7 +49,14 @@ class Task {
             break;
     }
     }
+    get projectID(){
+        return this._projectID;
+    }
 
+    set projectID(projectsID){
+        this._projectID = projectsID;
+    }
+    
     get project(){
         return this._project;
     }

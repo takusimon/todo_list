@@ -17,7 +17,8 @@ class CreateProject{
 
     addTaskToProject (name,dueDate=null,priority=null){
         const task = taskMasterList.createTask(name,dueDate,priority);
-        task.project = this.id;
+        task.projectID = this.id;
+        task.project = this.projectName;
 
         taskMasterList.appendTask(task);
     }
@@ -42,7 +43,7 @@ function filterByActive(projectName,projectId){
 
         default:
             return task =>
-                task.project === projectId && task.done === false;
+                task.projectID === projectId && task.done === false;
     }
 }
 
@@ -53,7 +54,7 @@ function filterByComplete(projectName,projectId){
 
         default:
             return task =>
-                task.project === projectId && task.done === true;
+                task.projectID === projectId && task.done === true;
     }
 }
 

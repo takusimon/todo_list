@@ -201,14 +201,19 @@ const makeNewProjectsButton = () => {
         const deleteProject = makeElement("button");
         deleteProject.textContent = "X";
         deleteProject.addEventListener('click',()=>{
-            ProjectMasterList.deleteProject(project.id);
-            projectContainer.remove();
-            const projectTasks = [].concat(project.getProjectTasks(),project.getCompletedTasks());
-            for (let i = 0;i < projectTasks.length; i++){
-                taskMasterList.deleteTask(project.id);
+            const confirmDelete = confirm("The Project and All It's Tasks Will Be Erased!")
+            if (confirmDelete){
+                ProjectMasterList.deleteProject(project.id);
+                projectContainer.remove();
+                const projectTasks = [].concat(project.getProjectTasks(),project.getCompletedTasks());
+                for (let i = 0;i < projectTasks.length; i++){
+                    taskMasterList.deleteTask(project.id);
+                }
+                customClickEvent();
+            } else {
+                return;
             }
-            customClickEvent();
-        })
+            })
         projectContainer.appendChild(deleteProject);
     }
 
