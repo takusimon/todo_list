@@ -94,10 +94,22 @@ const taskMasterList = (()=>{
     
     const appendTask = (task) => allTasks.push(task);
     
-    const deleteTask = (projectID) => {
+    const deleteAllTask = (projectID) => {
         const tasks = [].concat(allTasks,allCompletedTasks);
         const taskIndex = tasks.findIndex((task) => task.projectID === projectID)
         allTasks.splice(taskIndex,1);
+
+    }
+
+    const deleteSingleTask = (task) => {
+        const tasks = [].concat(allTasks,allCompletedTasks);
+        if (task.done){
+            const completedTaskIndex = allCompletedTasks.findIndex((singleTask) => singleTask.id === task.id);
+            allCompletedTasks.splice(completedTaskIndex,1);
+        } else {
+            const taskIndex = allTasks.findIndex((singleTask)=> singleTask.id === task.id);
+            allTasks.splice(taskIndex,1);
+        }
 
     }
 
@@ -131,7 +143,7 @@ const taskMasterList = (()=>{
     return task1.dueDate-task2.dueDate
     }
 
-    return {getAllTasks,appendTask,deleteTask,addCompletedTasks,getCompletedTasks,createTask,sortTasks,unCompleteTask};
+    return {getAllTasks,appendTask,deleteAllTask,addCompletedTasks,getCompletedTasks,createTask,sortTasks,unCompleteTask,deleteSingleTask};
 })();
 
 export {taskMasterList};

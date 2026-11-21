@@ -48,7 +48,6 @@ const makeInputBox = ()=>{
 const makeTaskListMemeber = (task) => {
     const taskContainer = document.createElement("div")
     taskContainer.dataset.taskId = task.id;
-
     const title = document.createElement("p");
     title.classList.add("task-title");
     title.textContent = task.title;
@@ -67,8 +66,8 @@ const makeTaskListMemeber = (task) => {
     done.classList.add("task-done");
     done.checked = task.done;
     done.addEventListener('click',()=>{
-        task.toggleDone();
         const proj = returnProjectGivenID(taskContainer);
+        task.toggleDone();
         if (task.done){
             taskMasterList.addCompletedTasks(task);
             appendTodoPane(makeProjectListPane(proj));
@@ -83,7 +82,16 @@ const makeTaskListMemeber = (task) => {
     if (task.dueDate){
         dueDate.textContent = formatDistanceToNowStrict(task.dueDate);
     }
-    taskContainer.append(done,title,dueDate,priority,project)
+
+    const deleteTaskBtn = makeElement("button");
+    deleteTaskBtn.id = "delete-task";
+    deleteTaskBtn.textContent = "X";
+    deleteTaskBtn.addEventListener('click',()=>{
+        const proj = returnProjectGivenID(taskContainer);
+        taskMasterList.deleteSingleTask(task);
+        appendTodoPane(makeProjectListPane(proj));
+    });
+    taskContainer.append(done,title,dueDate,priority,project,deleteTaskBtn)
 
     return taskContainer;
 };
@@ -219,7 +227,7 @@ const makeNewProjectsButton = () => {
                 projectContainer.remove();
                 const projectTasks = [].concat(project.getProjectTasks(),project.getCompletedTasks());
                 for (let i = 0;i < projectTasks.length; i++){
-                    taskMasterList.deleteTask(project.id);
+                    taskMasterList.deleteAllTask(project.id);
                 }
                 customClickEvent();
             } else {
