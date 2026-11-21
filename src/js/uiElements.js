@@ -65,6 +65,18 @@ const makeTaskListMemeber = (task) => {
     const done = document.createElement("input");
     done.type = "checkbox";
     done.classList.add("task-done");
+    done.checked = task.done;
+    done.addEventListener('click',()=>{
+        task.toggleDone();
+        const proj = returnProjectGivenID(taskContainer);
+        if (task.done){
+            taskMasterList.addCompletedTasks(task);
+            appendTodoPane(makeProjectListPane(proj));
+        } else if (!task.done){
+            taskMasterList.unCompleteTask(task);
+            appendTodoPane(makeProjectListPane(proj));
+        }
+    })
 
     const dueDate = document.createElement("p");
     dueDate.classList.add("task-dueDate");

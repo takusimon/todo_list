@@ -56,7 +56,7 @@ class Task {
     set projectID(projectsID){
         this._projectID = projectsID;
     }
-    
+
     get project(){
         return this._project;
     }
@@ -96,18 +96,26 @@ const taskMasterList = (()=>{
     
     const deleteTask = (projectID) => {
         const tasks = [].concat(allTasks,allCompletedTasks);
-        const taskIndex = tasks.findIndex((task) => task.project === projectID)
+        const taskIndex = tasks.findIndex((task) => task.projectID === projectID)
         allTasks.splice(taskIndex,1);
 
     }
 
     const addCompletedTasks = (task) => {
         if (task.done){
-        const [completed] = deleteTask(task);
-        allCompletedTasks.push(completed);
+        const completedIndex = allTasks.findIndex((singleTask)=> singleTask.id === task.id);
+        const [completedtask] = allTasks.splice(completedIndex,1);
+        allCompletedTasks.push(completedtask);
         }
-    }
+    };
 
+    const unCompleteTask = (task) => {
+        if (!task.done){
+        const taskIndex = allCompletedTasks.findIndex((singleTask)=> singleTask.id === task.id);
+        const [unCompletedTask] = allCompletedTasks.splice(taskIndex,1);
+        allTasks.push(unCompletedTask);
+        }
+    };
     function createTask(title,dueDate=null,priority=null){
     const task = new Task(title);
     task.dueDate = dueDate;
@@ -123,7 +131,7 @@ const taskMasterList = (()=>{
     return task1.dueDate-task2.dueDate
     }
 
-    return {getAllTasks,appendTask,deleteTask,addCompletedTasks,getCompletedTasks,createTask,sortTasks};
+    return {getAllTasks,appendTask,deleteTask,addCompletedTasks,getCompletedTasks,createTask,sortTasks,unCompleteTask};
 })();
 
 export {taskMasterList};
