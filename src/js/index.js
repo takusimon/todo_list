@@ -1,7 +1,9 @@
 import "../css/reset.css";
 import "../css/style.css";
 
-import {workSpaceButtons,makeElement, makeContainer, makeNewProjectsButton} from "./uiElements.js";
+import { workSpaceButtons } from "./ui/workspaceUI.js";
+import { makeNewProjectsButton } from "./ui/projectUI.js";
+import { makeElement, makeContainer } from "./ui/utils.js";
 
 const projectPane = (()=>{
     const projectOverview = document.querySelector(".project-overview");
