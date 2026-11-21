@@ -1,7 +1,7 @@
 import {taskMasterList} from "./tasks.js";
 
 class CreateProject{
-    constructor(name){
+    constructor(name,){
         this.projectName = name;
         
     }
@@ -16,64 +16,63 @@ class CreateProject{
     }
 
     addTaskToProject (name,dueDate=null,priority=null){
-        const task = createTask(name,dueDate,priority);
+        const task = taskMasterList.createTask(name,dueDate,priority);
         task.project = this.id;
 
-        taskMasterList.addTask(task);
+        taskMasterList.appendTask(task);
     }
 
     getProjectTasks (){
-        const projectFilter = filterByActive(this.projectName);
-        const tasks = taskMasterList.getAllTasks().filter(projectFilter);
-        return [...tasks].sort(taskMasterList.sortTasks);
+        const projectFilter = filterByActive(this.projectName, this.id);
+
+        return taskMasterList.getAllTasks().filter(projectFilter);
     }
 
     getCompletedTasks(){
-        const projectFilter = filterByComplete(this.projectName);
-        const completedTasks = taskMasterList.getCompletedTasks().filter(projectFilter);
-        return [...completedTasks].sort(taskMasterList.sortTasks);
+        const projectFilter = filterByComplete(this.projectName, this.id);
+
+        return taskMasterList.getCompletedTasks().filter(projectFilter);
     }
 }
 
-function filterByActive(projectName){
-    switch (projectName){
-        case "Inbox":
-            return task => task.project === "Inbox" && task.done === false;
+function filterByActive(projectName,projectId){
+    switch (projectName) {
         case "All":
             return task => task.done === false;
+
         default:
-            return task => task.project === this.id && task.done === false;
+            return task =>
+                task.project === projectId && task.done === false;
     }
 }
 
-function filterByComplete(projectName){
-    switch (projectName){
-        case "Inbox":
-            return task => task.project === "Inbox" && task.done === true;
+function filterByComplete(projectName,projectId){
+    switch (projectName) {
         case "All":
             return task => task.done === true;
+
         default:
-            return task => task.project === this.id && task.done === true;
+            return task =>
+                task.project === projectId && task.done === true;
     }
 }
 
-const Inbox = new CreateProject("Inbox");
-const All = new CreateProject("All");
+const Inbox = new CreateProject("Inbox","workspace");
+const All = new CreateProject("All","workspace");
 
 const  ProjectMasterList = (()=>{
     const allProjects = [];
     const appendProject = (project) => allProjects.push(project);
-
-    const deleteProject = (project) => {
-            const projectID = project.id;
-            const projectIndex = allProjects.findIndex(project => project.id === projectID);
+    const findProject = (id) => allProjects.findIndex(project => project.id === id);
+    const deleteProject = (projectId) => {
+            const projectIndex = findProject(projectId);
             allProjects.splice(projectIndex,1);
     }
 
     const getProjects = () => [...allProjects];
 
     const createProjects = (name) => new CreateProject(name);
-    const findProject = (id) => allProjects.findIndex(project => project.id === id);
+    
 
     return {appendProject,deleteProject,getProjects,createProjects,findProject};
 })();

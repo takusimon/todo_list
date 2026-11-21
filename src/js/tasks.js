@@ -52,8 +52,9 @@ class Task {
     }
 
     toggleDone (){
-        this.done = ~this.done;
+        this.done = !this.done;
     }
+    
 }
 
 function setPriority(priorityFlag){

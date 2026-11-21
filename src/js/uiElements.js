@@ -1,6 +1,6 @@
 import {formatDistanceToNow} from "date-fns";
 import { taskMasterList } from "./tasks.js";
-import { WorkspaceMasterList } from "./projects.js";
+import { ProjectMasterList, WorkspaceMasterList } from "./projects.js";
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
@@ -12,7 +12,20 @@ const makeInputBox = ()=>{
     taskInput.name = "task-input";
     taskInput.placeholder = "New Task Here";
 
-
+    newTaskForm.addEventListener('keydown',(event) => {
+        if (event.code === "Enter"){
+            event.preventDefault();
+            const projectbyID = taskInput.closest('[data-project-id]');
+            const workspaceIndex = WorkspaceMasterList.findWorkspace(projectbyID.dataset.projectId);
+            const taskName = taskInput.value.trim();
+            const projectIndex = ProjectMasterList.findProject(projectbyID.dataset.projectId);
+            if (workspaceIndex >= 0){
+                const workspace =WorkspaceMasterList.getWorkspaces()[workspaceIndex];
+                workspace.addTaskToProject(taskName);
+                appendTodoPane(makeProjectListPane(workspace));
+            }
+        }
+    })
     
     
 
@@ -31,19 +44,19 @@ const makeTaskListMemeber = (task) => {
 
     const priority = document.createElement("p");
     priority.classList.add("task-priority");
-    title.textContent = showPriority(task.priority);
+    priority.textContent = "blueflag";
     
     const project = document.createElement("span");
     project.classList.add("task-project");
-    project.textContent = showProjectName(task.project);
+    project.textContent = task.project;
 
     const done = document.createElement("input");
     done.type = "checkbox";
     done.classList.add("task-done");
 
     const dueDate = document.createElement("p");
-    date.classList.add("task-dueDate");
-    dueDate.textContent = formatDistanceToNow(task.date) ?? null;
+    dueDate.classList.add("task-dueDate");
+    dueDate.textContent = task.date;
 
     taskContainer.append(done,title,dueDate,priority,project)
 
@@ -86,7 +99,8 @@ function makeElement (type,elementClass=null) {
 
 function makeProjectListPane (project){
     const projectContainer = document.createElement("div");
-    projectContainer.classList.add("todo-pane");
+    projectContainer.classList.add("todo-pane-container");
+    projectContainer.dataset.projectId = project.id;
     const projectName = document.createElement("h1");
     projectName.textContent = project.projectName;
     const taskForm = makeInputBox();
@@ -108,6 +122,10 @@ function makeProjectListPane (project){
 
     return projectContainer
 };
-
+function appendTodoPane (pane){
+    const todoPane = document.querySelector(".todo-pane");
+    todoPane.textContent = '';
+    todoPane.append(pane);
+}
 
 export {workSpaceButtons}
