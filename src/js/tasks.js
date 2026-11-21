@@ -1,9 +1,6 @@
 class Task {
     constructor(title){
         this.title = title;
-        this.dueDate = "";
-        this.priority = "";
-        this.project = ""
         this.note = "";
         this.done = false;
         this.id = crypto.randomUUID();
@@ -51,6 +48,7 @@ class Task {
         }
     }
 
+
     toggleDone (){
         this.done = !this.done;
     }
@@ -77,9 +75,7 @@ function getDate(datestring){
     }
 
     if (datestring){
-        const [a,b,c] = datestring.split("-");
-
-        return new Date(a,b-1,c);
+           return new Date(datestring);
     };
 
     return
@@ -99,10 +95,8 @@ const taskMasterList = (()=>{
     
     const appendTask = (task) => allTasks.push(task);
     
-    const deleteTask = (taskToDel) => {
-        const taskID = taskToDel.id;
-
-        const taskIndex = allTasks.findIndex((task) => task.id === taskID)
+    const deleteTask = (taskid) => {
+        const taskIndex = allTasks.findIndex((task) => task.id === taskid)
         allTasks.splice(taskIndex,1);
 
     }

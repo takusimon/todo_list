@@ -1,35 +1,36 @@
-import {formatDistanceToNow} from "date-fns";
-import { taskMasterList } from "./tasks.js";
-import { ProjectMasterList, WorkspaceMasterList } from "./projects.js";
+import { ProjectMasterList, WorkspaceMasterList,returnProjectGivenID } from "./projects.js";
+import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
     newTaskForm.id = "new-task-form";
     const taskInput = document.createElement("input");
+    const taskDueDate = document.createElement("input");
 
     taskInput.type = "text";
     taskInput.id = "task-input";
     taskInput.name = "task-input";
     taskInput.placeholder = "New Task Here";
 
+    taskDueDate.type = "datetime-local";
+    taskDueDate.name = "task-due-date";
+    taskDueDate.id = "task-due-date";
+
     newTaskForm.addEventListener('keydown',(event) => {
         if (event.code === "Enter"){
             event.preventDefault();
-            const projectbyID = taskInput.closest('[data-project-id]');
-            const workspaceIndex = WorkspaceMasterList.findWorkspace(projectbyID.dataset.projectId);
             const taskName = taskInput.value.trim();
-            const projectIndex = ProjectMasterList.findProject(projectbyID.dataset.projectId);
-            if (workspaceIndex >= 0){
-                const workspace =WorkspaceMasterList.getWorkspaces()[workspaceIndex];
-                workspace.addTaskToProject(taskName);
-                appendTodoPane(makeProjectListPane(workspace));
-            }
+            const taskDue = taskDueDate.value;
+            const workspaceOrProject = returnProjectGivenID(newTaskForm);
+            workspaceOrProject.addTaskToProject(taskName,taskDue);
+            appendTodoPane(makeProjectListPane(workspaceOrProject));
+            
         }
     })
     
     
 
-    newTaskForm.append(taskInput,);
+    newTaskForm.append(taskInput,taskDueDate);
 
     return newTaskForm
 };
@@ -56,28 +57,30 @@ const makeTaskListMemeber = (task) => {
 
     const dueDate = document.createElement("p");
     dueDate.classList.add("task-dueDate");
-    dueDate.textContent = task.date;
-
+    if (task.dueDate){
+        dueDate.textContent = formatDistanceToNowStrict(task.dueDate);
+    }
     taskContainer.append(done,title,dueDate,priority,project)
 
     return taskContainer;
 };
 
 const workSpaceButtons = ()=> {
-    const todoPane = document.querySelector(".todo-pane")
     const workspaces = WorkspaceMasterList.getWorkspaces();
     const allBtn = document.createElement("button");
     allBtn.id = "all";
     allBtn.classList.add("workspace");
     allBtn.textContent = "All";
+    allBtn.addEventListener('click',() => {
+        appendTodoPane(makeProjectListPane(workspaces[0]));
+    })
 
     const inboxBtn = document.createElement("button");
     inboxBtn.id = "inbox";
     inboxBtn.classList.add("workspace");
     inboxBtn.textContent = "Inbox";
     inboxBtn.addEventListener('click',() => {
-        todoPane.textContent = '';
-       todoPane.appendChild(makeProjectListPane(workspaces[1]))
+        appendTodoPane(makeProjectListPane(workspaces[1]));
     })
 
     return [allBtn,inboxBtn];
@@ -122,10 +125,13 @@ function makeProjectListPane (project){
 
     return projectContainer
 };
+
 function appendTodoPane (pane){
     const todoPane = document.querySelector(".todo-pane");
     todoPane.textContent = '';
     todoPane.append(pane);
 }
+
+
 
 export {workSpaceButtons}

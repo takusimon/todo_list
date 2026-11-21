@@ -11,8 +11,8 @@ class CreateProject{
         return this.#id;
     }
     
-    deleteTaskFromProject (task) {
-        taskMasterList.deleteTask(task);
+    deleteTaskFromProject (taskid) {
+        taskMasterList.deleteTask(taskid);
     }
 
     addTaskToProject (name,dueDate=null,priority=null){
@@ -57,8 +57,8 @@ function filterByComplete(projectName,projectId){
     }
 }
 
-const Inbox = new CreateProject("Inbox","workspace");
-const All = new CreateProject("All","workspace");
+const Inbox = new CreateProject("Inbox");
+const All = new CreateProject("All");
 
 const  ProjectMasterList = (()=>{
     const allProjects = [];
@@ -87,4 +87,16 @@ const  WorkspaceMasterList = (()=>{
     return {getWorkspaces,findWorkspace};
 })();
 
-export {ProjectMasterList,WorkspaceMasterList}
+function returnProjectGivenID(element){
+    const closestProjectID = element.closest('[data-project-id]');
+    const workspaceIndex = WorkspaceMasterList.findWorkspace(closestProjectID.dataset.projectId);
+    const projectIndex = ProjectMasterList.findProject(closestProjectID.dataset.projectId);
+    
+    if (workspaceIndex >= 0) {
+        return WorkspaceMasterList.getWorkspaces()[workspaceIndex];
+    } else if (projectIndex >= 0) {
+        return ProjectMasterList.getProjects()[projectIndex];
+    }
+}
+
+export {ProjectMasterList,WorkspaceMasterList,returnProjectGivenID}
