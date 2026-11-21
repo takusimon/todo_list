@@ -16,13 +16,22 @@ const makeInputBox = ()=>{
     taskDueDate.name = "task-due-date";
     taskDueDate.id = "task-due-date";
 
+    const prioritySelect = document.createElement("select");
+    prioritySelect.options[prioritySelect.options.length] = new Option("🟥","red-flag");
+    prioritySelect.options[prioritySelect.options.length] = new Option("🟨","yellow-flag");
+    prioritySelect.options[prioritySelect.options.length] = new Option("🟦","blue-flag");
+    prioritySelect.options[prioritySelect.options.length] = new Option("⬜","clear-flag",true,true);
+    
+
+
     newTaskForm.addEventListener('keydown',(event) => {
         if (event.code === "Enter"){
             event.preventDefault();
             const taskName = taskInput.value.trim();
             const taskDue = taskDueDate.value;
+            const taskPriority = prioritySelect.value;
             const workspaceOrProject = returnProjectGivenID(newTaskForm);
-            workspaceOrProject.addTaskToProject(taskName,taskDue);
+            workspaceOrProject.addTaskToProject(taskName,taskDue,taskPriority);
             appendTodoPane(makeProjectListPane(workspaceOrProject));
             
         }
@@ -30,7 +39,7 @@ const makeInputBox = ()=>{
     
     
 
-    newTaskForm.append(taskInput,taskDueDate);
+    newTaskForm.append(taskInput,taskDueDate,prioritySelect);
 
     return newTaskForm
 };
@@ -45,8 +54,9 @@ const makeTaskListMemeber = (task) => {
 
     const priority = document.createElement("p");
     priority.classList.add("task-priority");
-    priority.textContent = "blueflag";
-    
+    if (task.priority !== "NONE"){
+        priority.textContent = task.priority;
+    }
     const project = document.createElement("span");
     project.classList.add("task-project");
     project.textContent = task.project;

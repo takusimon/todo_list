@@ -18,15 +18,36 @@ class Task {
     }
 
     set dueDate(datestring){
-        this._dueDate = getDate(datestring) ?? null;
+         if (datestring instanceof Date){
+            this._dueDate = datestring;
+            return;
+        }
+        if (datestring){
+            this._dueDate = new Date(datestring);
+            return;
+        }
+        this._dueDate = null;
     }
 
     get priority(){
         return this._priority;
     }
 
-    set priority(priorityState){
-        this._priority = setPriority(priorityState);
+    set priority(priorityFlag){
+        switch (priorityFlag){
+        case "red-flag":
+            this._priority = "🟥";
+            break;
+        case "yellow-flag":
+            this._priority = "🟨";
+            break;
+        case "blue-flag":
+            this._priority = "🟦";
+            break;
+        case "clear-flag":
+            this._priority = "NONE";
+            break;
+    }
     }
 
     get project(){
@@ -56,27 +77,14 @@ class Task {
 }
 
 function setPriority(priorityFlag){
-    switch (priorityFlag){
-        case "red-flag":
-            return "HIGH";
-        case "yellow-flag":
-            return "MED";
-        case "blue-flag":
-            return "LOW";
-        case "clear-flag":
-        default:
-            return "NONE";
-    }
+    
 }
 
-function getDate(datestring){
-    if (datestring instanceof Date){
-        return datestring;
-    }
 
-    if (datestring){
-           return new Date(datestring);
-    };
+function getDate(datestring){
+   
+
+    
 
     return
 }
