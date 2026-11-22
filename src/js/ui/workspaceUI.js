@@ -8,7 +8,7 @@ export const workSpaceButtons = ()=> {
     const allBtn = document.createElement("button");
     allBtn.id = "all";
     allBtn.classList.add("workspace");
-    allBtn.textContent = "All";
+    allBtn.textContent = "󰛇 All";
     allBtn.addEventListener('click',() => {
         appendTodoPane(makeProjectListPane(workspaces[0]));
     })
@@ -16,7 +16,7 @@ export const workSpaceButtons = ()=> {
     const inboxBtn = document.createElement("button");
     inboxBtn.id = "inbox";
     inboxBtn.classList.add("workspace");
-    inboxBtn.textContent = "Inbox";
+    inboxBtn.textContent = "󱉴 Inbox";
     inboxBtn.addEventListener('click',() => {
         appendTodoPane(makeProjectListPane(workspaces[1]));
     })

@@ -33,6 +33,7 @@ export function makeProjectListPane (project){
 
 export const makeNewProjectsButton = () => {
     const projectTitle = makeElement("p");
+    const titleContainer = makeContainer('title-container');
     const newProjectContainer = makeContainer('new-project-container');
     const projectsContainer = makeContainer('project-container');
     projectTitle.id = "project-title";
@@ -63,6 +64,7 @@ export const makeNewProjectsButton = () => {
         event.preventDefault();
         if (newProjectInput.value){
             const projButton = makeElement("button");
+            projButton.classList.add('project');
             const project = ProjectMasterList.createProjects(newProjectInput.value.trim());
             const projectButtonContainer = makeContainer(`${project.projectName}`);
             ProjectMasterList.appendProject(project);
@@ -83,17 +85,20 @@ export const makeNewProjectsButton = () => {
 
     projectDialogue.append(newProjectForm,cancelBtn,addProjBtn);
 
-    const addProjectBtn = makeContainer("button");
-    addProjectBtn.textContent = "➕";
+    const addProjectBtnExterior = makeElement("button");
+    addProjectBtnExterior.id = "add-project-btn";
+    addProjectBtnExterior.textContent = "+";
 
-    addProjectBtn.addEventListener('click',() =>{
+    addProjectBtnExterior.addEventListener('click',() =>{
         projectDialogue.showModal();
     })
 
     function deleteProjectButton(project){
         const projectContainer = document.querySelector(`[data-project-id="${project.id}"]`);
+        projectContainer.classList.add('prject-buttons')
         const deleteProject = makeElement("button");
         deleteProject.textContent = "X";
+        deleteProject.classList.add('delete-proj');
         deleteProject.addEventListener('click',()=>{
             const confirmDelete = confirm("The Project and All It's Tasks Will Be Erased!")
             if (confirmDelete){
@@ -110,8 +115,8 @@ export const makeNewProjectsButton = () => {
             })
         projectContainer.appendChild(deleteProject);
     }
-
-    newProjectContainer.append(projectTitle,addProjectBtn,projectDialogue,projectsContainer);
+    titleContainer.append(projectTitle,addProjectBtnExterior)
+    newProjectContainer.append(titleContainer,projectDialogue,projectsContainer);
 
     return newProjectContainer
 
