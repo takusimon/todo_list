@@ -4,6 +4,7 @@ import "../css/style.css";
 import { workSpaceButtons } from "./ui/workspaceUI.js";
 import { makeNewProjectsButton } from "./ui/projectUI.js";
 import { makeElement, makeContainer } from "./ui/utils.js";
+import { customClickEvent } from "./ui/render.js";
 
 const projectPane = (()=>{
     const projectOverview = document.querySelector(".project-overview");
@@ -12,9 +13,8 @@ const projectPane = (()=>{
     const [allBtn,inboxBtn] = workSpaceButtons();
     workspaceContainer.append(allBtn,inboxBtn);
     
-    
-
     projectOverview.append(workspaceContainer,makeNewProjectsButton());
+    customClickEvent();
 })();
 
 

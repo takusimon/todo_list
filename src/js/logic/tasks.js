@@ -36,13 +36,13 @@ class Task {
     set priority(priorityFlag){
         switch (priorityFlag){
         case "red-flag":
-            this._priority = "🟥";
+            this._priority = "HIGH";
             break;
         case "yellow-flag":
-            this._priority = "🟨";
+            this._priority = "MED";
             break;
         case "blue-flag":
-            this._priority = "🟦";
+            this._priority = "LOW";
             break;
         case "clear-flag":
             this._priority = "NONE";
