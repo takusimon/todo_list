@@ -330,3 +330,18 @@ div[data-priority="LOW"]:hover{
 .task-overview {
     
 }
+
+.task-overview > div {
+    margin-top:1rem;
+    padding:1rem;
+    display:flex;
+    gap:1rem;
+}
+
+.editable {
+    margin-right:auto;
+    background-color: var(--secondary);
+    height:3ch;
+    width:100%;
+    border-radius:10px;
+}

@@ -57,6 +57,9 @@ const makeTaskListMemeber = (task) => {
     taskContainer.dataset.taskId = task.id;
     taskContainer.classList.add("task");
     taskContainer.dataset.priority = task.priority;
+    taskContainer.addEventListener('click',() => {
+        displayTaskContent(task);
+    })
     const title = document.createElement("p");
     title.classList.add("task-title");
     title.textContent = task.title;
@@ -102,4 +105,29 @@ const makeTaskListMemeber = (task) => {
     return taskContainer;
 };
 
+function displayTaskContent(task){
+    const taskOverview = document.querySelector(".task-overview");
+    taskOverview.textContent = "";
+    const titleContainer = makeContainer('task-title');
+    const titleLabel = makeElement("span");
+    titleLabel.textContent = "Title:"
+    titleLabel.classList.add('task-title');
+    const title = makeElement("p");
+    title.classList.add("task-title","editable");
+    title.textContent = task.title;
+    title.contentEditable = "true";
+    titleContainer.append(titleLabel,title,acceptChanges(task,"title",title));
+
+    taskOverview.append(titleContainer);
+}
+
+function acceptChanges(task,property,element){
+    const acceptChange = makeElement("button");
+    acceptChange.textContent = "\u{2713}";
+    acceptChange.addEventListener('click',()=>{
+        task[property] = element.textContent;
+    })
+
+    return acceptChange;
+}
 export {makeInputBox,makeTaskListMemeber}
