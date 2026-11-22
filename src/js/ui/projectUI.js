@@ -13,15 +13,17 @@ export function makeProjectListPane (project){
     projectName.textContent = project.projectName;
     const taskForm = makeInputBox();
     const taskContainer = document.createElement("div");
+    taskContainer.id = "task-container";
     const projectTasks = project.getProjectTasks();
     for (let task of projectTasks){
      taskContainer.append(makeTaskListMemeber(task));
     }
     const completedProjectTasks = project.getCompletedTasks();
     const completedText = document.createElement("h2");
+    if (project.getCompletedTasks().length > 0){
     completedText.textContent = "Completed";
     taskContainer.appendChild(completedText);
-
+    }
     for (let task of completedProjectTasks){
         taskContainer.append(makeTaskListMemeber(task));
     }

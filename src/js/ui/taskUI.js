@@ -4,7 +4,7 @@ import { returnProjectGivenID } from "../logic/projects.js";
 
 import { makeProjectListPane } from "./projectUI.js";
 import { appendTodoPane } from "./render.js";
-import { makeElement } from "./utils.js";
+import { makeContainer, makeElement } from "./utils.js";
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
@@ -16,6 +16,7 @@ const makeInputBox = ()=>{
     taskInput.id = "task-input";
     taskInput.name = "task-input";
     taskInput.placeholder = "New Task Here";
+    taskInput.setAttribute('maxlength',35);
 
     taskDueDate.type = "datetime-local";
     taskDueDate.name = "task-due-date";
@@ -27,7 +28,8 @@ const makeInputBox = ()=>{
     prioritySelect.options[prioritySelect.options.length] = new Option("🟦","blue-flag");
     prioritySelect.options[prioritySelect.options.length] = new Option("⬜","clear-flag",true,true);
     
-
+    const dueDateContainer = makeContainer("due-date-container");
+    dueDateContainer.append(taskDueDate,prioritySelect);
 
     newTaskForm.addEventListener('keydown',(event) => {
         if (event.code === "Enter"){
@@ -44,7 +46,7 @@ const makeInputBox = ()=>{
     
     
 
-    newTaskForm.append(taskInput,taskDueDate,prioritySelect);
+    newTaskForm.append(taskInput,dueDateContainer);
 
     return newTaskForm
 };
@@ -52,6 +54,7 @@ const makeInputBox = ()=>{
 const makeTaskListMemeber = (task) => {
     const taskContainer = document.createElement("div")
     taskContainer.dataset.taskId = task.id;
+    taskContainer.classList.add("task");
     const title = document.createElement("p");
     title.classList.add("task-title");
     title.textContent = task.title;
