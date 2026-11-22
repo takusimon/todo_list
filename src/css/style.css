@@ -328,7 +328,8 @@ div[data-priority="LOW"]:hover{
 
 
 .task-overview {
-    
+    display:flex;
+    flex-flow: column;
 }
 
 .task-overview > div {
@@ -344,4 +345,21 @@ div[data-priority="LOW"]:hover{
     height:3ch;
     width:100%;
     border-radius:10px;
+}
+
+#accept-change,#cancel-change{
+    background-color:var(--primary);
+    border:none;
+    border-radius: 10px;
+    font-size:1.2rem;
+}
+
+#accept-change:hover,#cancel-change:hover{
+    background-color: var(--tertiary);
+}
+#accept-change{
+    color:greenyellow;
+}
+#cancel-change{
+    color:red;
 }

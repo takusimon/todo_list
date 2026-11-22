@@ -1,5 +1,6 @@
 import { ProjectMasterList } from "../logic/projects.js";
 
+
 export function appendTodoPane (pane){
     const todoPane = document.querySelector(".todo-pane");
     todoPane.textContent = '';
@@ -10,4 +11,5 @@ export function inboxCustomClickEvent (){
     let event = new Event('click');
     inboxBtn.dispatchEvent(event);
 }
+
 

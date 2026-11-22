@@ -1,6 +1,6 @@
 import { formatDistanceToNowStrict } from "date-fns";
 import { taskMasterList } from "../logic/tasks.js";
-import { returnProjectGivenID } from "../logic/projects.js";
+import { ProjectMasterList, returnProjectGivenID, WorkspaceMasterList } from "../logic/projects.js";
 
 import { makeProjectListPane } from "./projectUI.js";
 import { appendTodoPane } from "./render.js";
@@ -123,10 +123,19 @@ function displayTaskContent(task){
 
 function acceptChanges(task,property,element){
     const acceptChange = makeElement("button");
+    const projectIndex = ProjectMasterList.findProject(task.projectID);
+    const workspaceIndex = WorkspaceMasterList.findWorkspace(task.projectID);
+    const workspace = WorkspaceMasterList.getWorkspaces()[workspaceIndex];
+    const project = ProjectMasterList.getProjects()[projectIndex];
     acceptChange.textContent = "\u{2713}";
     acceptChange.id = "accept-change"
     acceptChange.addEventListener('click',()=>{
         task[property] = element.textContent;
+        if (project){
+            appendTodoPane(makeProjectListPane(project));
+        } else {
+            appendTodoPane(makeProjectListPane(workspace));
+        }
     })
 
     return acceptChange;
