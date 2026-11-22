@@ -116,7 +116,7 @@ function displayTaskContent(task){
     title.classList.add("task-title","editable");
     title.textContent = task.title;
     title.contentEditable = "true";
-    titleContainer.append(titleLabel,title,acceptChanges(task,"title",title));
+    titleContainer.append(titleLabel,title,acceptChanges(task,"title",title),cancelChanges(task,"title",title));
 
     taskOverview.append(titleContainer);
 }
@@ -124,10 +124,21 @@ function displayTaskContent(task){
 function acceptChanges(task,property,element){
     const acceptChange = makeElement("button");
     acceptChange.textContent = "\u{2713}";
+    acceptChange.id = "accept-change"
     acceptChange.addEventListener('click',()=>{
         task[property] = element.textContent;
     })
 
     return acceptChange;
+}
+function cancelChanges(task,property,element){
+    const cancelChange = makeElement("button");
+    cancelChange.textContent = "X";
+    cancelChange.id = "cancel-change";
+    cancelChange.addEventListener('click',()=>{
+        element.textContent = task[property];
+    })
+
+    return cancelChange;
 }
 export {makeInputBox,makeTaskListMemeber}

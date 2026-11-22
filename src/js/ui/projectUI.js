@@ -3,7 +3,7 @@ import { taskMasterList } from "../logic/tasks.js";
 
 import { makeInputBox, makeTaskListMemeber } from "./taskUI.js";
 import { makeElement, makeContainer } from "./utils.js";
-import { appendTodoPane, customClickEvent } from "./render.js";
+import { appendTodoPane,inboxCustomClickEvent } from "./render.js";
 
 export function makeProjectListPane (project){
     const projectContainer = document.createElement("div");
@@ -123,7 +123,7 @@ export const makeNewProjectsButton = () => {
                 for (let i = 0;i < projectTasks.length; i++){
                     taskMasterList.deleteAllTask(project.id);
                 }
-                customClickEvent();
+                inboxCustomClickEvent();
             } else {
                 return;
             }
