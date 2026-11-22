@@ -11,3 +11,8 @@ export function makeElement (type) {
 
     return element
 }
+
+export function clearTaskOverview(){
+    const taskOverview = document.querySelector(".task-overview");
+    taskOverview.textContent = '';
+}

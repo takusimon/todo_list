@@ -4,7 +4,7 @@ import { ProjectMasterList, returnProjectGivenID, WorkspaceMasterList } from "..
 
 import { makeProjectListPane } from "./projectUI.js";
 import { appendTodoPane } from "./render.js";
-import { makeContainer, makeElement } from "./utils.js";
+import { clearTaskOverview, makeContainer, makeElement } from "./utils.js";
 
 const makeInputBox = ()=>{
     const newTaskForm = document.createElement("form");
@@ -101,6 +101,7 @@ const makeTaskListMemeber = (task) => {
     deleteTaskBtn.addEventListener('click',()=>{
         const proj = returnProjectGivenID(taskContainer);
         taskMasterList.deleteSingleTask(task);
+        clearTaskOverview();
         appendTodoPane(makeProjectListPane(proj));
     });
     taskContainer.append(done,title,dueDate,project,description,deleteTaskBtn)
@@ -143,9 +144,25 @@ function displayTaskContent(task){
     formDescriptionInputContainer.append(descriptionLabel,descriptionInput);
     descriptionForm.append(formDescriptionInputContainer,formDescriptionButtonContainer);
 
+    const dueDatePriorityForm = makeElement("form");
+    dueDatePriorityForm.id = "due-date-priority-form";
+    const taskDueDate = document.createElement("input");
 
+    taskDueDate.type = "datetime-local";
+    taskDueDate.name = "task-due-date";
+    taskDueDate.id = "task-due-date";
+    const dueDateContainer = makeContainer("edit-task-duedate-container");
+    dueDateContainer.append(taskDueDate,acceptChanges(task,"dueDate",taskDueDate,"value"));
+    const prioritySelect = document.createElement("select");
+    prioritySelect.options[prioritySelect.options.length] = new Option("🟥","red-flag");
+    prioritySelect.options[prioritySelect.options.length] = new Option("🟨","yellow-flag");
+    prioritySelect.options[prioritySelect.options.length] = new Option("🟦","blue-flag");
+    prioritySelect.options[prioritySelect.options.length] = new Option("⬜","clear-flag");
+    const priorityContainer = makeContainer("edit-task-priority-container");
+    priorityContainer.append(prioritySelect,acceptChanges(task,"priority",prioritySelect,"value"));
 
-    taskOverview.append(titleContainer,descriptionForm);
+    dueDatePriorityForm.append(dueDateContainer,priorityContainer);
+    taskOverview.append(titleContainer,descriptionForm,dueDatePriorityForm);
 }
 
 function acceptChanges(task,property,element,elementProp){

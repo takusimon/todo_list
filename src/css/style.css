@@ -397,3 +397,16 @@ div[data-priority="LOW"]:hover{
 #description-label{
     align-self: flex-start;
 }
+
+#due-date-priority-form{
+    padding:1.2rem;
+    display: flex;
+    gap:1rem;
+}
+#edit-task-duedate-container,#edit-task-priority-container{
+    display: flex;
+    gap:1rem;
+    outline:1px solid var(--tertiary);
+    padding:1rem;
+    border-radius: 10px;
+}
