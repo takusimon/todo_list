@@ -40,19 +40,28 @@ export const makeNewProjectsButton = () => {
     projectTitle.textContent = "Projects";
 
     const projectDialogue = makeElement("dialog");
-    projectDialogue.id = "new-project dialogue";
+    projectDialogue.id = "new-project-dialog";
 
     const newProjectForm = makeElement("form");
     newProjectForm.id = "new-project-form";
 
+    const newProjectLabel = makeElement("label");
+    newProjectLabel.htmlFor = "new-project-input";
+    newProjectLabel.textContent = "New Project";
+    newProjectLabel.classList.add('project-label');
+
+    const projectInputContainer = makeContainer("project-input-container");
     const newProjectInput = makeElement("input");
     newProjectInput.type = "text";
     newProjectInput.id = "new-project-input";
     newProjectInput.placeholder = "Project Name";
-    newProjectForm.append(newProjectInput);
+    projectInputContainer.append(newProjectLabel,newProjectInput);
+    newProjectForm.append(projectInputContainer);
 
     const cancelBtn = makeElement("button");
     cancelBtn.textContent = "Cancel";
+    cancelBtn.classList.add("dialog-btn");
+    cancelBtn.id = "cancel-btn";
     cancelBtn.addEventListener('click',() =>{
         newProjectForm.reset();
         projectDialogue.close()});
@@ -60,6 +69,9 @@ export const makeNewProjectsButton = () => {
     const addProjBtn = makeElement("button");
     addProjBtn.textContent = "Add";
     addProjBtn.htmlFor = "new-project-form";
+    addProjBtn.classList.add('dialog-btn');
+    addProjBtn.id = "add-btn";
+
     addProjBtn.addEventListener('click',(event) => {
         event.preventDefault();
         if (newProjectInput.value){
@@ -82,8 +94,9 @@ export const makeNewProjectsButton = () => {
             alert("Project must have a name!")
         }
     })
-
-    projectDialogue.append(newProjectForm,cancelBtn,addProjBtn);
+    const dialogBtnContainer = makeContainer('dialog-btn-container');
+    dialogBtnContainer.append(cancelBtn,addProjBtn);
+    projectDialogue.append(newProjectForm,dialogBtnContainer);
 
     const addProjectBtnExterior = makeElement("button");
     addProjectBtnExterior.id = "add-project-btn";
@@ -115,7 +128,7 @@ export const makeNewProjectsButton = () => {
             })
         projectContainer.appendChild(deleteProject);
     }
-    titleContainer.append(projectTitle,addProjectBtnExterior)
+    titleContainer.append(projectTitle,addProjectBtnExterior);
     newProjectContainer.append(titleContainer,projectDialogue,projectsContainer);
 
     return newProjectContainer
