@@ -2,7 +2,7 @@ import { ProjectMasterList } from "../logic/projects.js";
 import { taskMasterList } from "../logic/tasks.js";
 
 import { makeInputBox, makeTaskListMemeber } from "./taskUI.js";
-import { makeElement, makeContainer } from "./utils.js";
+import { makeElement, makeContainer, clearTaskOverview } from "./utils.js";
 import { appendTodoPane,inboxCustomClickEvent } from "./render.js";
 
 export function makeProjectListPane (project){
@@ -85,6 +85,7 @@ export const makeNewProjectsButton = () => {
             projButton.textContent = project.projectName;
             projButton.addEventListener('click',()=>{
                 appendTodoPane(makeProjectListPane(project))
+                clearTaskOverview();
             });
             projectButtonContainer.append(projButton);
             projectButtonContainer.dataset.projectId = project.id;

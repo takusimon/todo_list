@@ -2,6 +2,7 @@ import { WorkspaceMasterList } from "../logic/projects.js";
 
 import { makeProjectListPane } from "./projectUI.js";
 import { appendTodoPane } from "./render.js";
+import { clearTaskOverview } from "./utils.js";
 
 export const workSpaceButtons = ()=> {
     const workspaces = WorkspaceMasterList.getWorkspaces();
@@ -11,6 +12,7 @@ export const workSpaceButtons = ()=> {
     allBtn.textContent = "󰛇 All";
     allBtn.addEventListener('click',() => {
         appendTodoPane(makeProjectListPane(workspaces[0]));
+        clearTaskOverview();
     })
 
     const inboxBtn = document.createElement("button");
@@ -19,6 +21,7 @@ export const workSpaceButtons = ()=> {
     inboxBtn.textContent = "󱉴 Inbox";
     inboxBtn.addEventListener('click',() => {
         appendTodoPane(makeProjectListPane(workspaces[1]));
+        clearTaskOverview();
     })
 
     return [allBtn,inboxBtn];

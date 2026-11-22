@@ -85,7 +85,11 @@ const makeTaskListMemeber = (task) => {
             appendTodoPane(makeProjectListPane(proj));
         }
     })
-
+    const taskNotes = document.createElement("span");
+    taskNotes.id = "task-notes";
+    if (task.notes){
+        taskNotes.textContent = "󰎛";
+    }
     const dueDate = document.createElement("p");
     dueDate.classList.add("task-dueDate");
     if (task.dueDate){
@@ -98,13 +102,14 @@ const makeTaskListMemeber = (task) => {
     const deleteTaskBtn = makeElement("button");
     deleteTaskBtn.id = "delete-task";
     deleteTaskBtn.textContent = "X";
-    deleteTaskBtn.addEventListener('click',()=>{
+    deleteTaskBtn.addEventListener('click',(event)=>{
+        event.stopPropagation();
         const proj = returnProjectGivenID(taskContainer);
         taskMasterList.deleteSingleTask(task);
         clearTaskOverview();
         appendTodoPane(makeProjectListPane(proj));
     });
-    taskContainer.append(done,title,dueDate,project,description,deleteTaskBtn)
+    taskContainer.append(done,title,dueDate,project,description,taskNotes,deleteTaskBtn)
 
     return taskContainer;
 };
@@ -162,7 +167,19 @@ function displayTaskContent(task){
     priorityContainer.append(prioritySelect,acceptChanges(task,"priority",prioritySelect,"value"));
 
     dueDatePriorityForm.append(dueDateContainer,priorityContainer);
-    taskOverview.append(titleContainer,descriptionForm,dueDatePriorityForm);
+
+    const taskNotes = makeElement("textarea");
+    taskNotes.id = "task-note-field";
+    if (task.notes){
+        taskNotes.value = task.notes;
+    }
+    const taskNotesContainer = makeContainer("task-notes-container")
+    const taskNotesButtonContainer = makeContainer("task-note-button-container");
+    const notesTitle = makeElement("h2");
+    notesTitle.textContent = "Notes";
+    taskNotesButtonContainer.append(acceptChanges(task,"notes",taskNotes,"value"),cancelChanges(task,"notes",taskNotes,"value"));
+    taskNotesContainer.append(notesTitle,taskNotes,taskNotesButtonContainer);
+    taskOverview.append(titleContainer,descriptionForm,dueDatePriorityForm,taskNotesContainer);
 }
 
 function acceptChanges(task,property,element,elementProp){
