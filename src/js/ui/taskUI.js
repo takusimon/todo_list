@@ -91,6 +91,9 @@ const makeTaskListMemeber = (task) => {
     if (task.dueDate){
         dueDate.textContent = formatDistanceToNowStrict(task.dueDate);
     }
+    const description = document.createElement("p");
+    description.classList.add("task-description");
+    description.textContent = task.description;
 
     const deleteTaskBtn = makeElement("button");
     deleteTaskBtn.id = "delete-task";
@@ -100,7 +103,7 @@ const makeTaskListMemeber = (task) => {
         taskMasterList.deleteSingleTask(task);
         appendTodoPane(makeProjectListPane(proj));
     });
-    taskContainer.append(done,title,dueDate,project,deleteTaskBtn)
+    taskContainer.append(done,title,dueDate,project,description,deleteTaskBtn)
 
     return taskContainer;
 };
@@ -116,21 +119,46 @@ function displayTaskContent(task){
     title.classList.add("task-title","editable");
     title.textContent = task.title;
     title.contentEditable = "true";
-    titleContainer.append(titleLabel,title,acceptChanges(task,"title",title),cancelChanges(task,"title",title));
+    titleContainer.append(titleLabel,title,acceptChanges(task,"title",title,"textContent"),cancelChanges(task,"title",title));
 
-    taskOverview.append(titleContainer);
+    const descriptionForm = makeElement("form");
+    descriptionForm.id = ('description-form');
+    const descriptionInput = makeElement("input");
+    descriptionInput.type = "text";
+    descriptionInput.id = "description-input";
+    if(task.description){
+        descriptionInput.value = task.description;
+    } else {
+        descriptionInput.placeholder = "Project Description Max 30 Chars"
+    }
+    descriptionInput.setAttribute('maxlength',30);
+    const descriptionLabel = makeElement("label");
+    descriptionLabel.htmlFor = "description-input";
+    descriptionLabel.textContent = "Description:";
+    descriptionLabel.classList.add("task-title");
+    descriptionLabel.id = "description-label";
+    const formDescriptionButtonContainer = makeContainer('form-desc-buttons');
+    formDescriptionButtonContainer.append(acceptChanges(task,"description",descriptionInput,"value"),cancelChanges(task,"description",descriptionInput,"value"));
+    const formDescriptionInputContainer = makeContainer("form-desc-input");
+    formDescriptionInputContainer.append(descriptionLabel,descriptionInput);
+    descriptionForm.append(formDescriptionInputContainer,formDescriptionButtonContainer);
+
+
+
+    taskOverview.append(titleContainer,descriptionForm);
 }
 
-function acceptChanges(task,property,element){
+function acceptChanges(task,property,element,elementProp){
     const acceptChange = makeElement("button");
     const projectIndex = ProjectMasterList.findProject(task.projectID);
     const workspaceIndex = WorkspaceMasterList.findWorkspace(task.projectID);
     const workspace = WorkspaceMasterList.getWorkspaces()[workspaceIndex];
     const project = ProjectMasterList.getProjects()[projectIndex];
     acceptChange.textContent = "\u{2713}";
-    acceptChange.id = "accept-change"
+    acceptChange.id = "accept-change";
+    acceptChange.type = "button";
     acceptChange.addEventListener('click',()=>{
-        task[property] = element.textContent;
+        task[property] = element[elementProp];
         if (project){
             appendTodoPane(makeProjectListPane(project));
         } else {
@@ -140,12 +168,13 @@ function acceptChanges(task,property,element){
 
     return acceptChange;
 }
-function cancelChanges(task,property,element){
+function cancelChanges(task,property,element,elementProp){
     const cancelChange = makeElement("button");
     cancelChange.textContent = "X";
     cancelChange.id = "cancel-change";
+    cancelChange.type = "button";
     cancelChange.addEventListener('click',()=>{
-        element.textContent = task[property];
+        element[elementProp] = task[property];
     })
 
     return cancelChange;

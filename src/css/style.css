@@ -192,7 +192,7 @@ h2 {
 }
 
 
-#task-input {
+#task-input,#description-input {
     background-color: var(--secondary);
     border: none;
     width:100%;
@@ -204,11 +204,11 @@ h2 {
     flex:1;
 }
 
-#task-input:hover {
+#task-input:hover, #description-input:hover{
     background-color: var(--tertiary);
 }
 
-#task-input:focus {
+#task-input:focus,#description-input:focus{
     outline: 1px solid var(--blue);
 }
 
@@ -273,6 +273,9 @@ select {
     justify-self: self-end;
     padding:1rem;
 }
+.task-description {
+    grid-column:2/3;
+}
 
 .task-project {
     grid-column:3/4 ;
@@ -284,6 +287,11 @@ select {
     padding:.2rem 1rem;
     border-radius: 20px;
 
+}
+
+.task-description {
+    color:var(--grey-text);
+    font-size:.8rem;
 }
 #delete-task {
     grid-column: 4/5;
@@ -362,4 +370,30 @@ div[data-priority="LOW"]:hover{
 }
 #cancel-change{
     color:red;
+}
+#description-form{
+    display:grid;
+    display:flex;
+    gap:1rem;
+    padding:1rem;
+}
+
+
+#form-desc-input{
+    display: flex;
+    flex-flow:column;
+    padding:1rem;
+    width:88%;
+}
+
+#form-desc-buttons{
+
+    display:flex;
+    gap:1rem;
+    align-self: center;
+    position: relative;
+    top:10%;
+}
+#description-label{
+    align-self: flex-start;
 }

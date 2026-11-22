@@ -64,6 +64,12 @@ class Task {
     set project(projectName){
         this._project = projectName;
     }
+    get description(){
+        return this._description;
+    }
+    set description(descriptionText){
+        this._description = descriptionText;
+    }
     get note(){
         return this._note;
     }
