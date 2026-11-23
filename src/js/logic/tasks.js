@@ -1,155 +1,168 @@
 class Task {
-    constructor(title){
-        this.title = title;
-        this.note = "";
-        this.done = false;
-        this.id = crypto.randomUUID();
-    }
-    get title(){
-        return this._title;
-    }
-    
-    set title(text){
-        this._title = text;
-    }
+  constructor(title) {
+    this.title = title;
+    this.note = "";
+    this.done = false;
+    this.id = crypto.randomUUID();
+  }
+  get title() {
+    return this._title;
+  }
 
-    get dueDate(){
-        return this._dueDate;
-    }
+  set title(text) {
+    this._title = text;
+  }
 
-    set dueDate(datestring){
-         if (datestring instanceof Date){
-            this._dueDate = datestring;
-            return;
-        }
-        if (datestring){
-            this._dueDate = new Date(datestring);
-            return;
-        }
-        this._dueDate = null;
-    }
+  get dueDate() {
+    return this._dueDate;
+  }
 
-    get priority(){
-        return this._priority;
+  set dueDate(datestring) {
+    if (datestring instanceof Date) {
+      this._dueDate = datestring;
+      return;
     }
+    if (datestring) {
+      this._dueDate = new Date(datestring);
+      return;
+    }
+    this._dueDate = null;
+  }
 
-    set priority(priorityFlag){
-        switch (priorityFlag){
-        case "red-flag":
-            this._priority = "HIGH";
-            break;
-        case "yellow-flag":
-            this._priority = "MED";
-            break;
-        case "blue-flag":
-            this._priority = "LOW";
-            break;
-        case "clear-flag":
-            this._priority = "NONE";
-            break;
-    }
-    }
-    get projectID(){
-        return this._projectID;
-    }
+  get priority() {
+    return this._priority;
+  }
 
-    set projectID(projectsID){
-        this._projectID = projectsID;
+  set priority(priorityFlag) {
+    switch (priorityFlag) {
+      case "red-flag":
+        this._priority = "HIGH";
+        break;
+      case "yellow-flag":
+        this._priority = "MED";
+        break;
+      case "blue-flag":
+        this._priority = "LOW";
+        break;
+      case "clear-flag":
+        this._priority = "NONE";
+        break;
     }
+  }
+  get projectID() {
+    return this._projectID;
+  }
 
-    get project(){
-        return this._project;
-    }
-    
-    set project(projectName){
-        this._project = projectName;
-    }
-    get description(){
-        return this._description;
-    }
-    set description(descriptionText){
-        this._description = descriptionText;
-    }
-    get note(){
-        return this._note;
-    }
+  set projectID(projectsID) {
+    this._projectID = projectsID;
+  }
 
-    set note(text){
-        if (this._note){
-            this._note += ` ${text}`;
-        } else {
-            this._note = text;
-        }
-    }
+  get project() {
+    return this._project;
+  }
 
+  set project(projectName) {
+    this._project = projectName;
+  }
+  get description() {
+    return this._description;
+  }
+  set description(descriptionText) {
+    this._description = descriptionText;
+  }
+  get note() {
+    return this._note;
+  }
 
-    toggleDone (){
-        this.done = !this.done;
+  set note(text) {
+    if (this._note) {
+      this._note += ` ${text}`;
+    } else {
+      this._note = text;
     }
-    
+  }
+
+  toggleDone() {
+    this.done = !this.done;
+  }
 }
 
+const taskMasterList = (() => {
+  const allTasks = [];
+  const allCompletedTasks = [];
 
-const taskMasterList = (()=>{
-    const allTasks = [];
-    const allCompletedTasks = [];
+  const getAllTasks = () => [...allTasks].sort(sortTasks);
 
-    const getAllTasks = () => [...allTasks].sort(sortTasks);
-    
-    const getCompletedTasks = ()=> [...allCompletedTasks].sort(sortTasks);
-    
-    const appendTask = (task) => allTasks.push(task);
-    
-    const deleteAllTask = (projectID) => {
-        const tasks = [].concat(allTasks,allCompletedTasks);
-        const taskIndex = tasks.findIndex((task) => task.projectID === projectID)
-        allTasks.splice(taskIndex,1);
+  const getCompletedTasks = () => [...allCompletedTasks].sort(sortTasks);
 
+  const appendTask = (task) => allTasks.push(task);
+
+  const deleteAllTask = (projectID) => {
+    const tasks = [].concat(allTasks, allCompletedTasks);
+    const taskIndex = tasks.findIndex((task) => task.projectID === projectID);
+    allTasks.splice(taskIndex, 1);
+  };
+
+  const deleteSingleTask = (task) => {
+    const tasks = [].concat(allTasks, allCompletedTasks);
+    if (task.done) {
+      const completedTaskIndex = allCompletedTasks.findIndex(
+        (singleTask) => singleTask.id === task.id,
+      );
+      allCompletedTasks.splice(completedTaskIndex, 1);
+    } else {
+      const taskIndex = allTasks.findIndex(
+        (singleTask) => singleTask.id === task.id,
+      );
+      allTasks.splice(taskIndex, 1);
     }
+  };
 
-    const deleteSingleTask = (task) => {
-        const tasks = [].concat(allTasks,allCompletedTasks);
-        if (task.done){
-            const completedTaskIndex = allCompletedTasks.findIndex((singleTask) => singleTask.id === task.id);
-            allCompletedTasks.splice(completedTaskIndex,1);
-        } else {
-            const taskIndex = allTasks.findIndex((singleTask)=> singleTask.id === task.id);
-            allTasks.splice(taskIndex,1);
-        }
-
+  const addCompletedTasks = (task) => {
+    if (task.done) {
+      const completedIndex = allTasks.findIndex(
+        (singleTask) => singleTask.id === task.id,
+      );
+      const [completedtask] = allTasks.splice(completedIndex, 1);
+      allCompletedTasks.push(completedtask);
     }
+  };
 
-    const addCompletedTasks = (task) => {
-        if (task.done){
-        const completedIndex = allTasks.findIndex((singleTask)=> singleTask.id === task.id);
-        const [completedtask] = allTasks.splice(completedIndex,1);
-        allCompletedTasks.push(completedtask);
-        }
-    };
-
-    const unCompleteTask = (task) => {
-        if (!task.done){
-        const taskIndex = allCompletedTasks.findIndex((singleTask)=> singleTask.id === task.id);
-        const [unCompletedTask] = allCompletedTasks.splice(taskIndex,1);
-        allTasks.push(unCompletedTask);
-        }
-    };
-    function createTask(title,dueDate=null,priority=null){
+  const unCompleteTask = (task) => {
+    if (!task.done) {
+      const taskIndex = allCompletedTasks.findIndex(
+        (singleTask) => singleTask.id === task.id,
+      );
+      const [unCompletedTask] = allCompletedTasks.splice(taskIndex, 1);
+      allTasks.push(unCompletedTask);
+    }
+  };
+  function createTask(title, dueDate = null, priority = null) {
     const task = new Task(title);
     task.dueDate = dueDate;
     task.priority = priority;
 
     return task;
-    }
+  }
 
-    function sortTasks(task1,task2){
+  function sortTasks(task1, task2) {
     if (task1.dueDate === null) return 1;
     if (task2.dueDate === null) return -1;
 
-    return task1.dueDate-task2.dueDate
-    }
+    return task1.dueDate - task2.dueDate;
+  }
 
-    return {getAllTasks,appendTask,deleteAllTask,addCompletedTasks,getCompletedTasks,createTask,sortTasks,unCompleteTask,deleteSingleTask};
+  return {
+    getAllTasks,
+    appendTask,
+    deleteAllTask,
+    addCompletedTasks,
+    getCompletedTasks,
+    createTask,
+    sortTasks,
+    unCompleteTask,
+    deleteSingleTask,
+  };
 })();
 
-export {taskMasterList};
+export { taskMasterList };

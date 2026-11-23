@@ -1,18 +1,17 @@
 export const makeContainer = (id) => {
-    const container = document.createElement('div');
-    container.id = id;
+  const container = document.createElement("div");
+  container.id = id;
 
-    return container;
+  return container;
+};
+
+export function makeElement(type) {
+  const element = document.createElement(type);
+
+  return element;
 }
 
-export function makeElement (type) {
-    const element = document.createElement(type);
-
-
-    return element
-}
-
-export function clearTaskOverview(){
-    const taskOverview = document.querySelector(".task-overview");
-    taskOverview.textContent = '';
+export function clearTaskOverview() {
+  const taskOverview = document.querySelector(".task-overview");
+  taskOverview.textContent = "";
 }
