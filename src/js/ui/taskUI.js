@@ -15,6 +15,7 @@ const makeInputBox = () => {
   newTaskForm.id = "new-task-form";
   const taskInput = document.createElement("input");
   const taskDueDate = document.createElement("input");
+  taskInput.required = true;
 
   taskInput.type = "text";
   taskInput.id = "task-input";
@@ -51,6 +52,10 @@ const makeInputBox = () => {
   dueDateContainer.append(taskDueDate, prioritySelect);
 
   newTaskForm.addEventListener("keydown", (event) => {
+    if(taskInput.validity.valueMissing){
+        taskInput.setCustomValidity("I am expecting a task name!");
+    } else {
+        taskInput.setCustomValidity("");
     if (event.code === "Enter") {
       event.preventDefault();
       const taskName = taskInput.value.trim();
@@ -60,6 +65,7 @@ const makeInputBox = () => {
       workspaceOrProject.addTaskToProject(taskName, taskDue, taskPriority);
       appendTodoPane(makeProjectListPane(workspaceOrProject));
     }
+}
   });
 
   newTaskForm.append(taskInput, dueDateContainer);
