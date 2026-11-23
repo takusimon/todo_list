@@ -97,6 +97,8 @@ const taskMasterList = (() => {
 
   const appendTask = (task) => allTasks.push(task);
 
+  const appendCompleted = (task) => allCompletedTasks.push(task);
+
   const deleteAllTask = (projectID) => {
     const tasks = [].concat(allTasks, allCompletedTasks);
     const taskIndex = tasks.findIndex((task) => task.projectID === projectID);
@@ -155,6 +157,7 @@ const taskMasterList = (() => {
   return {
     getAllTasks,
     appendTask,
+    appendCompleted,
     deleteAllTask,
     addCompletedTasks,
     getCompletedTasks,

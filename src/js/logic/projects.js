@@ -1,13 +1,18 @@
 import { taskMasterList } from "./tasks.js";
 
 class CreateProject {
-  constructor(name) {
+  constructor(name,id) {
     this.projectName = name;
+    this.id = id;
   }
-  #id = crypto.randomUUID();
+  
 
   get id() {
-    return this.#id;
+    return this._id;
+  }
+
+  set id(SpecialID){
+    this._id = SpecialID ?? crypto.randomUUID();
   }
 
   deleteTaskFromProject(taskid) {
@@ -55,7 +60,8 @@ function filterByComplete(projectName, projectId) {
   }
 }
 
-const Inbox = new CreateProject("Inbox");
+const Inbox = new CreateProject("Inbox","01012498");
+
 const All = new CreateProject("All");
 
 const ProjectMasterList = (() => {

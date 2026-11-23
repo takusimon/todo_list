@@ -1,5 +1,6 @@
 import { formatDistanceToNowStrict } from "date-fns";
 import { taskMasterList } from "../logic/tasks.js";
+import { saveTasks } from "../logic/localstore.js";
 import {
   ProjectMasterList,
   returnProjectGivenID,
@@ -63,6 +64,7 @@ const makeInputBox = () => {
       const taskPriority = prioritySelect.value;
       const workspaceOrProject = returnProjectGivenID(newTaskForm);
       workspaceOrProject.addTaskToProject(taskName, taskDue, taskPriority);
+      saveTasks();
       appendTodoPane(makeProjectListPane(workspaceOrProject));
     }
 }
@@ -104,10 +106,11 @@ const makeTaskListMemeber = (task) => {
       taskMasterList.unCompleteTask(task);
       appendTodoPane(makeProjectListPane(proj));
     }
+    saveTasks();
   });
   const taskNotes = document.createElement("span");
   taskNotes.id = "task-notes";
-  if (task.notes) {
+  if (task.note) {
     taskNotes.textContent = "󰎛";
   }
   const dueDate = document.createElement("p");
@@ -126,6 +129,7 @@ const makeTaskListMemeber = (task) => {
     event.stopPropagation();
     const proj = returnProjectGivenID(taskContainer);
     taskMasterList.deleteSingleTask(task);
+    saveTasks();
     clearTaskOverview();
     appendTodoPane(makeProjectListPane(proj));
   });
@@ -227,16 +231,16 @@ function displayTaskContent(task) {
 
   const taskNotes = makeElement("textarea");
   taskNotes.id = "task-note-field";
-  if (task.notes) {
-    taskNotes.value = task.notes;
+  if (task.note) {
+    taskNotes.value = task.note;
   }
   const taskNotesContainer = makeContainer("task-notes-container");
   const taskNotesButtonContainer = makeContainer("task-note-button-container");
   const notesTitle = makeElement("h2");
   notesTitle.textContent = "Notes";
   taskNotesButtonContainer.append(
-    acceptChanges(task, "notes", taskNotes, "value"),
-    cancelChanges(task, "notes", taskNotes, "value"),
+    acceptChanges(task, "note", taskNotes, "value"),
+    cancelChanges(task, "note", taskNotes, "value"),
   );
   taskNotesContainer.append(notesTitle, taskNotes, taskNotesButtonContainer);
   taskOverview.append(
@@ -263,6 +267,7 @@ function acceptChanges(task, property, element, elementProp) {
     } else {
       appendTodoPane(makeProjectListPane(workspace));
     }
+    saveTasks();
   });
 
   return acceptChange;
