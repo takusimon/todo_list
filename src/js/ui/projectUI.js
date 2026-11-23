@@ -57,6 +57,7 @@ export const makeNewProjectsButton = () => {
   newProjectInput.type = "text";
   newProjectInput.id = "new-project-input";
   newProjectInput.placeholder = "Project Name";
+  newProjectInput.required = true;
   projectInputContainer.append(newProjectLabel, newProjectInput);
   newProjectForm.append(projectInputContainer);
 
@@ -74,10 +75,14 @@ export const makeNewProjectsButton = () => {
   addProjBtn.htmlFor = "new-project-form";
   addProjBtn.classList.add("dialog-btn");
   addProjBtn.id = "add-btn";
-
+  addProjBtn.type = "submit";
   addProjBtn.addEventListener("click", (event) => {
     event.preventDefault();
-    if (newProjectInput.value) {
+    if (newProjectInput.validity.valueMissing) {
+      newProjectInput.setCustomValidity("Give The Project a Name!");
+      newProjectInput.reportValidity();
+    } else {
+        newProjectInput.setCustomValidity("");
       const projButton = makeElement("button");
       projButton.classList.add("project");
       const project = ProjectMasterList.createProjects(
@@ -96,8 +101,6 @@ export const makeNewProjectsButton = () => {
       deleteProjectButton(project);
       newProjectForm.reset();
       projectDialogue.close();
-    } else {
-      alert("Project must have a name!");
     }
   });
   const dialogBtnContainer = makeContainer("dialog-btn-container");
