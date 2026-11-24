@@ -4,6 +4,7 @@ import { taskMasterList } from "../logic/tasks.js";
 import { makeInputBox, makeTaskListMemeber } from "./taskUI.js";
 import { makeElement, makeContainer, clearTaskOverview } from "./utils.js";
 import { appendTodoPane, inboxCustomClickEvent } from "./render.js";
+import { saveProjects } from "../logic/localstore.js";
 
 export function makeProjectListPane(project) {
   const projectContainer = document.createElement("div");
@@ -90,6 +91,7 @@ export const makeNewProjectsButton = () => {
       );
       const projectButtonContainer = makeContainer(`${project.projectName}`);
       ProjectMasterList.appendProject(project);
+      saveProjects();
       projButton.textContent = project.projectName;
       projButton.addEventListener("click", () => {
         appendTodoPane(makeProjectListPane(project));
@@ -153,3 +155,48 @@ export const makeNewProjectsButton = () => {
 
   return newProjectContainer;
 };
+function deleteProjectButton(project) {
+    const projectContainer = document.querySelector(
+      `[data-project-id="${project.id}"]`,
+    );
+    projectContainer.classList.add("prject-buttons");
+    const deleteProject = makeElement("button");
+    deleteProject.textContent = "X";
+    deleteProject.classList.add("delete-proj");
+    deleteProject.addEventListener("click", () => {
+      const confirmDelete = confirm(
+        "The Project and All It's Tasks Will Be Erased!",
+      );
+      if (confirmDelete) {
+        ProjectMasterList.deleteProject(project.id);
+        saveProjects();
+        projectContainer.remove();
+        const projectTasks = [].concat(
+          project.getProjectTasks(),
+          project.getCompletedTasks(),
+        );
+        for (let i = 0; i < projectTasks.length; i++) {
+          taskMasterList.deleteAllTask(project.id);
+        }
+        inboxCustomClickEvent();
+      } else {
+        return;
+      }
+    });
+    projectContainer.appendChild(deleteProject);
+  }
+export function projectButtonMaker(project){
+  const projButton = makeElement("button");
+  const projectsContainer = document.querySelector("#project-container");
+      projButton.classList.add("project");
+      const projectButtonContainer = makeContainer(`${project.projectName}`);
+      projButton.textContent = project.projectName;
+      projButton.addEventListener("click", () => {
+        appendTodoPane(makeProjectListPane(project));
+        clearTaskOverview();
+      });
+      projectButtonContainer.append(projButton);
+      projectButtonContainer.dataset.projectId = project.id;
+      projectsContainer.appendChild(projectButtonContainer);
+      deleteProjectButton(project);
+}

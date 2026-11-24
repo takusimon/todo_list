@@ -76,7 +76,7 @@ const ProjectMasterList = (() => {
 
   const getProjects = () => [...allProjects];
 
-  const createProjects = (name) => new CreateProject(name);
+  const createProjects = (name,id) => new CreateProject(name,id);
 
   return {
     appendProject,

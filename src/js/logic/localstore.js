@@ -23,7 +23,6 @@ function saveTasks(){
     if (storageAvailable("localStorage")){
         const tasks = [].concat(taskMasterList.getAllTasks(),taskMasterList.getCompletedTasks());
         localStorage.setItem("tasks",JSON.stringify(tasks));
-        console.log("Tasks Saved");
     } else {
         return;
     }
@@ -47,4 +46,24 @@ function loadTasks () {
     }
 }
 
-export {saveTasks,loadTasks}
+function saveProjects(){
+    if(storageAvailable("localStorage")){
+        const projects = ProjectMasterList.getProjects();
+        localStorage.setItem("projects",JSON.stringify(projects));
+    } else {
+        return;
+    }
+}
+
+function loadProjects () {
+    if(storageAvailable("localStorage")){
+        const retrievedProjects = JSON.parse(localStorage.getItem("projects"));
+
+        for (let project of retrievedProjects){
+            const restoredProject = ProjectMasterList.createProjects(project.projectName,project._id);
+            ProjectMasterList.appendProject(restoredProject);
+        }
+    }
+}
+
+export {saveTasks,loadTasks,saveProjects,loadProjects};
