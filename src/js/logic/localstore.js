@@ -31,7 +31,7 @@ function saveTasks(){
 function loadTasks () {
     if (storageAvailable("localStorage")){
         const retrievedTasks = JSON.parse(localStorage.getItem("tasks"));
-        
+        if (retrievedTasks){
         for (let task of retrievedTasks){
             const restoredTask = taskMasterList.createTask(task._title,task._dueDate,task._priority);
             restoredTask.done = task.done;
@@ -42,7 +42,7 @@ function loadTasks () {
             restoredTask.note = task._note;
             !restoredTask.done ? taskMasterList.appendTask(restoredTask):taskMasterList.appendCompleted(restoredTask);
         }
-        console.log("Tasks Restored");
+    }
     }
 }
 
@@ -58,11 +58,12 @@ function saveProjects(){
 function loadProjects () {
     if(storageAvailable("localStorage")){
         const retrievedProjects = JSON.parse(localStorage.getItem("projects"));
-
+        if (retrievedProjects){
         for (let project of retrievedProjects){
             const restoredProject = ProjectMasterList.createProjects(project.projectName,project._id);
             ProjectMasterList.appendProject(restoredProject);
         }
+    }
     }
 }
 

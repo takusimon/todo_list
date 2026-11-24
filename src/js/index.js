@@ -18,8 +18,10 @@ const projectPane = (() => {
 
   projectOverview.append(workspaceContainer, makeNewProjectsButton());
   const currentProjects = ProjectMasterList.getProjects();
-  for (let project of currentProjects){
-    projectButtonMaker(project);
+  if (currentProjects){
+    for (let project of currentProjects){
+      projectButtonMaker(project);
+    }
   }
   inboxCustomClickEvent();
 })();
